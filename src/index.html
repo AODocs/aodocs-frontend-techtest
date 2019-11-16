@@ -6,12 +6,88 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="755040865326-h5gomu85549lkh2qf9d3lku39vnaf6ii.apps.googleusercontent.com">
+    <!-- <meta name="google-signin-client_id" content="755040865326-h5gomu85549lkh2qf9d3lku39vnaf6ii.apps.googleusercontent.com"> -->
+    <meta name="google-signin-client_id" content="827319715715-9fena5vrikp76hmo718lqoqro7m68ntn.apps.googleusercontent.com">
     <meta name="google-signin-scope" content="profile email https://www.googleapis.com/auth/drive">
     <script src="./main.js"></script>
     <!-- <script src="./main.ts"></script> -->
+    <style>
+
+        #content, #content-folders {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .file-box {
+            position: relative;
+            border:1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            width: 250px;
+            height: 100%;
+            margin: 0.8em;
+        }
+
+        .file-box.selected > .informations{
+            background-color: #e8f0fe;
+            color: #1967d2;
+        }
+
+        .file-box .thumb {
+            height: 150px;
+            margin: 0;
+            border:none;
+            width: 100%;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .file-box .informations {
+            padding: 0.8em;
+            font-weight: 500;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 0.45em;
+            color: rgba(0,0,0,.72);
+        }
+
+        .file-box .informations .file-name {
+            display: flex;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+
+        .file-box .informations .icon {
+            padding: 2px;
+            background-color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin-right: 0.2em;
+        }
+
+    </style>
 </head>
 <body>
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <div id="content-folders"></div>
+    <div id="content">
+        <div class="file-box hidden">
+            <div class="thumb"></div>
+            <div class="informations">
+                <div class="file-name">
+                    <div class="icon"></div>
+                    <h1 class="title"></h1>
+                </div>
+                <h2 class="timestamp"></h2>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
