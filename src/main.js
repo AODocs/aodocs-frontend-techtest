@@ -22,27 +22,35 @@ function listDriveFile() {
 
             
             data.files.forEach(file => {
-              console.log(file);
+              // console.log(file);
+
+              //References to main and childs tags
               let newBox = fileBox.cloneNode(true),
                   title = newBox.querySelector('.title'),
                   icon = newBox.querySelector('.icon'),
                   timestamp = newBox.querySelector('.timestamp'),
                   thumb = newBox.querySelector('.thumb');
               
+              //Getting file type based on MIME
               let itemType = filterMime(file.mimeType);
               
+              //Attribute content based on current data
               newBox.classList.remove('hidden');
               icon.style.backgroundImage = ` url(${file.iconLink})`;
               title.innerText = file.name;
               timestamp.innerText = `Modified ${moment(file.modifiedTime).fromNow()}`;
               newBox.addEventListener('click', () => openLink(file.webViewLink));
 
+              //Append in correct container based on file type
               if (itemType !== 'folder') {
                 thumb.style.backgroundImage = `url(${file.thumbnailLink || file.iconLink})`;
+
                 container.appendChild(newBox);
               } else {
+                //removing useless elements
                 thumb.classList.add('hidden');
                 timestamp.classList.add('hidden');
+
                 folderContainer.appendChild(newBox);
               }
 
