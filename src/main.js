@@ -2,17 +2,22 @@ import { getRequestHeaders } from './auth';
 import moment from 'moment';
 
 let selected = [],
-    nextPageToken = "";
+    nextPageToken = "",
+    isLoadingContent = false;
 
 //Waiting for DOM load
 window.addEventListener("DOMContentLoaded", () => {
   let starButton = document.querySelector('.files-actions .star'),
       unstarButton = document.querySelector('.files-actions .unstar');
   
-  window.addEventListener('scroll', e => {
-    console.log(window.scrollY);
+  //Listening event for infinite pagination
+  window.addEventListener('scroll', () => {
+    if (!isLoadingContent && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      listDriveFile();
+    }
   });
-  
+
+  //Adding click listener for starring actions
   starButton.addEventListener('click', starSelected);
   unstarButton.addEventListener('click', unstarSelected);
   
@@ -20,16 +25,33 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function listDriveFile() {
+  isLoadingContent = true;
   getRequestHeaders().then(headers => 
     {
       let options = {
         headers
       };
 
-      fetch(`https://www.googleapis.com/drive/v3/files?pageSize=25&fields=nextPageToken,files/id,files/webViewLink,files/mimeType,files/iconLink,files/thumbnailLink,files/name,files/modifiedTime&pageToken=${nextPageToken}`, options)
+      let fields = {
+        files: [
+          "id",
+          "webViewLink",
+          "mimeType",
+          "iconLink",
+          "thumbnailLink",
+          "name",
+          "modifiedTime"
+        ],
+      };
+
+      fetch(`https://www.googleapis.com/drive/v3/files?pageSize=25&fields=nextPageToken${convertFields(fields)}&pageToken=${nextPageToken}`, options)
         .then(res => res.json()).then(data => {
           if (data && data.files) {
             console.log(data);
+
+            //Setting next page token
+            nextPageToken = data.nextPageToken;
+
             let container = document.querySelector('#content');
             let fileBox = document.querySelector('.file-box');
 
@@ -66,8 +88,20 @@ function listDriveFile() {
               container.appendChild(newBox);
             });
           }
+        }).then(() => {
+          isLoadingContent = false;
         }).catch(console.error);
     });
+}
+
+function convertFields(fields) {
+  let result = "";
+  for (let key in fields) {
+    fields[key].forEach(val => {
+      result += `,${key}/${val}`;
+    });
+  }
+  return result;
 }
 
 function toggleSelectItem(item) {
