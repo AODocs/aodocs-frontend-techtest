@@ -40,12 +40,14 @@ function listDriveFile() {
               title.innerText = file.name;
               timestamp.innerText = `Modified ${moment(file.modifiedTime).fromNow()}`;
 
+              //Set thumbnail based on type
+              thumb.style.backgroundImage = `url(${(itemType !== 'folder') ? file.thumbnailLink : file.iconLink})`;
+              console.log(file.name, file.thumbnailLink);
+
               //Adding eventlisterners for files actions
               thumb.addEventListener('click', () => openLink(file.webViewLink));
               informations.addEventListener('click', () => toggleSelectItem(newBox));
 
-              //Set thumbnail based on type
-              thumb.style.backgroundImage = `url(${(itemType !== 'folder') ? file.thumbnailLink : file.iconLink})`;
               container.appendChild(newBox);
             });
           }
@@ -63,6 +65,23 @@ function toggleSelectItem(item) {
   } else {
     selected.push(id);
     item.classList.add('selected');
+  }
+
+  updateSelectedCount();
+  toggleActions();
+}
+
+function updateSelectedCount() {
+  let counter = document.querySelector('.selected-count');
+  counter.innerText = (selected.length > 0) ? `${selected.length} item${selected.length > 1 ? 's' : ''} selected` : '';
+}
+
+function toggleActions() {
+  let buttons = document.querySelectorAll('.files-actions .btn');
+  if (selected.length > 0){
+    buttons.forEach(button => button.classList.remove('disabled'))
+  } else {
+    buttons.forEach(button => button.classList.add('disabled'))
   }
 }
 
