@@ -110,6 +110,28 @@
             line-height: 40px;
         }
 
+        .infinite-loader {
+            padding: 1em;
+        }
+
+
+        .loader {
+            border: 5px solid rgba(0, 0, 0, 0.2);
+            border-top-color: #000;
+            border-radius: 50%;
+            width: 3em;
+            height: 3em;
+            animation: spin 1s linear infinite;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -130,6 +152,9 @@
                 <h2 class="timestamp"></h2>
             </div>
         </div>
+    </div>
+    <div class="infinite-loader">
+        <div class="loader hidden"></div>
     </div>
 </body>
 </html>
