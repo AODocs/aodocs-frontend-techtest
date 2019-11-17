@@ -2,6 +2,7 @@ import { getRequestHeaders } from './auth';
 import moment from 'moment';
 
 let selected = [],
+    historyToken = [],
     nextPageToken = "",
     isLoadingContent = false;
 
@@ -12,7 +13,7 @@ window.addEventListener("DOMContentLoaded", () => {
   
   //Listening event for infinite pagination
   window.addEventListener('scroll', () => {
-    if (!isLoadingContent && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if (!historyToken.find(id => id == nextPageToken) && !isLoadingContent && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
       listDriveFile();
     }
   });
@@ -49,8 +50,11 @@ function listDriveFile() {
           if (data && data.files) {
             console.log(data);
 
-            //Setting next page token
-            nextPageToken = data.nextPageToken;
+            //Setting old and next page token
+            if (data.nextPageToken) {
+              historyToken.push(nextPageToken);
+              nextPageToken = data.nextPageToken;
+            }
 
             let container = document.querySelector('#content');
             let fileBox = document.querySelector('.file-box');
