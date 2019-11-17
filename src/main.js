@@ -12,7 +12,7 @@ function listDriveFile() {
         headers
       };
 
-      fetch('https://www.googleapis.com/drive/v3/files?pageSize=25&fields=files/webViewLink,files/mimeType,files/iconLink,files/thumbnailLink,files/name,files/modifiedTime', options)
+      fetch('https://www.googleapis.com/drive/v3/files?pageSize=25&fields=files/id,files/webViewLink,files/mimeType,files/iconLink,files/thumbnailLink,files/name,files/modifiedTime', options)
         .then(res => res.json()).then(data => {
           if (data && data.files) {
 
