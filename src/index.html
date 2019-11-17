@@ -44,7 +44,8 @@
             border:none;
             width: 100%;
             background-position: center;
-            background-size: cover;
+            background-repeat: no-repeat;
+            background-size: contain;
         }
 
         .file-box .informations {
@@ -115,8 +116,8 @@
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <div class="files-actions">
         <div class="selected-count"></div>
-        <div class="btn">STAR SELECTED</div>
-        <div class="btn">UNSTAR SELECTED</div>
+        <div class="btn disabled">STAR SELECTED</div>
+        <div class="btn disabled">UNSTAR SELECTED</div>
     </div>
     <div id="content">
         <div class="file-box hidden">
