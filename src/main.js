@@ -27,6 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function listDriveFile() {
   isLoadingContent = true;
+  showLoader();
   getRequestHeaders().then(headers => 
     {
       let options = {
@@ -48,7 +49,6 @@ function listDriveFile() {
       fetch(`https://www.googleapis.com/drive/v3/files?pageSize=25&fields=nextPageToken${convertFields(fields)}&pageToken=${nextPageToken}`, options)
         .then(res => res.json()).then(data => {
           if (data && data.files) {
-            console.log(data);
 
             //Setting old and next page token
             if (data.nextPageToken) {
@@ -60,8 +60,6 @@ function listDriveFile() {
             let fileBox = document.querySelector('.file-box');
 
             data.files.forEach(file => {
-              // console.log(file);
-
               //References to main and childs tags
               let newBox = fileBox.cloneNode(true),
                   title = newBox.querySelector('.title'),
@@ -94,6 +92,7 @@ function listDriveFile() {
           }
         }).then(() => {
           isLoadingContent = false;
+          hideLoader();
         }).catch(console.error);
     });
 }
@@ -136,6 +135,20 @@ function toggleActions() {
     buttons.forEach(button => button.classList.remove('disabled'))
   } else {
     buttons.forEach(button => button.classList.add('disabled'))
+  }
+}
+
+function showLoader() {
+  let loader = document.querySelector('.loader');
+  if (loader) {
+    loader.classList.remove('hidden');
+  }
+}
+
+function hideLoader() {
+  let loader = document.querySelector('.loader');
+  if (loader) {
+    loader.classList.add('hidden');
   }
 }
 
