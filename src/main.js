@@ -1,7 +1,23 @@
 import { getRequestHeaders } from './auth';
 import moment from 'moment';
 
-let selected = [];
+let selected = [],
+    nextPageToken = "";
+
+//Waiting for DOM load
+window.addEventListener("DOMContentLoaded", () => {
+  let starButton = document.querySelector('.files-actions .star'),
+      unstarButton = document.querySelector('.files-actions .unstar');
+  
+  window.addEventListener('scroll', e => {
+    console.log(window.scrollY);
+  });
+  
+  starButton.addEventListener('click', starSelected);
+  unstarButton.addEventListener('click', unstarSelected);
+  
+  listDriveFile();
+});
 
 function listDriveFile() {
   getRequestHeaders().then(headers => 
@@ -10,10 +26,10 @@ function listDriveFile() {
         headers
       };
 
-      fetch('https://www.googleapis.com/drive/v3/files?pageSize=25&fields=files/id,files/webViewLink,files/mimeType,files/iconLink,files/thumbnailLink,files/name,files/modifiedTime', options)
+      fetch(`https://www.googleapis.com/drive/v3/files?pageSize=25&fields=nextPageToken,files/id,files/webViewLink,files/mimeType,files/iconLink,files/thumbnailLink,files/name,files/modifiedTime&pageToken=${nextPageToken}`, options)
         .then(res => res.json()).then(data => {
           if (data && data.files) {
-
+            console.log(data);
             let container = document.querySelector('#content');
             let fileBox = document.querySelector('.file-box');
 
@@ -42,7 +58,6 @@ function listDriveFile() {
 
               //Set thumbnail based on type
               thumb.style.backgroundImage = `url(${(itemType !== 'folder') ? file.thumbnailLink : file.iconLink})`;
-              console.log(file.name, file.thumbnailLink);
 
               //Adding eventlisterners for files actions
               thumb.addEventListener('click', () => openLink(file.webViewLink));
@@ -67,6 +82,7 @@ function toggleSelectItem(item) {
     item.classList.add('selected');
   }
 
+  //Updating visual
   updateSelectedCount();
   toggleActions();
 }
@@ -95,4 +111,10 @@ function filterMime(mime) {
   return mime.replace("application/vnd.google-apps.", "");
 }
 
-listDriveFile();
+function starSelected() {
+  console.log('starSelected')
+}
+
+function unstarSelected() {
+  console.log('unstarSelected')
+}
