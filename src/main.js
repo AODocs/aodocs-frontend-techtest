@@ -3,8 +3,6 @@ import moment from 'moment';
 
 let selected = [];
 
-
-
 function listDriveFile() {
   getRequestHeaders().then(headers => 
     {
@@ -16,11 +14,9 @@ function listDriveFile() {
         .then(res => res.json()).then(data => {
           if (data && data.files) {
 
-            let container = document.querySelector('#content'),
-                folderContainer = document.querySelector('#content-folders');
+            let container = document.querySelector('#content');
             let fileBox = document.querySelector('.file-box');
 
-            
             data.files.forEach(file => {
               // console.log(file);
 
@@ -29,47 +25,55 @@ function listDriveFile() {
                   title = newBox.querySelector('.title'),
                   icon = newBox.querySelector('.icon'),
                   timestamp = newBox.querySelector('.timestamp'),
+                  informations = newBox.querySelector('.informations'),
                   thumb = newBox.querySelector('.thumb');
               
               //Getting file type based on MIME
               let itemType = filterMime(file.mimeType);
+
+              //Adding file id to data set
+              newBox.dataset.fileId = file.id;
               
               //Attribute content based on current data
               newBox.classList.remove('hidden');
               icon.style.backgroundImage = ` url(${file.iconLink})`;
               title.innerText = file.name;
               timestamp.innerText = `Modified ${moment(file.modifiedTime).fromNow()}`;
-              newBox.addEventListener('click', () => openLink(file.webViewLink));
 
-              //Append in correct container based on file type
-              if (itemType !== 'folder') {
-                thumb.style.backgroundImage = `url(${file.thumbnailLink || file.iconLink})`;
+              //Adding eventlisterners for files actions
+              thumb.addEventListener('click', () => openLink(file.webViewLink));
+              informations.addEventListener('click', () => toggleSelectItem(newBox));
 
-                container.appendChild(newBox);
-              } else {
-                //removing useless elements
-                thumb.classList.add('hidden');
-                timestamp.classList.add('hidden');
-
-                folderContainer.appendChild(newBox);
-              }
-
+              //Set thumbnail based on type
+              thumb.style.backgroundImage = `url(${(itemType !== 'folder') ? file.thumbnailLink : file.iconLink})`;
+              container.appendChild(newBox);
             });
           }
         }).catch(console.error);
     });
 }
 
+function toggleSelectItem(item) {
+  let id = item.dataset.fileId;
+  let itemIndex = selected.indexOf(id);
+
+  if (itemIndex > -1) {
+    selected.splice(itemIndex, 1);
+    item.classList.remove('selected');
+  } else {
+    selected.push(id);
+    item.classList.add('selected');
+  }
+}
+
 function openLink(link) {
-  window.open(link, '_blank');
+  if (selected.length == 0) {
+    window.open(link, '_blank');
+  }
 }
 
 function filterMime(mime) {
   return mime.replace("application/vnd.google-apps.", "");
-}
-
-function toggleItem(item) {
-  console.log(item);
 }
 
 listDriveFile();
