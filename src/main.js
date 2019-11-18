@@ -43,7 +43,7 @@ function listDriveFile() {
           "thumbnailLink",
           "name",
           "modifiedTime"
-        ],
+        ]
       };
 
       fetch(`https://www.googleapis.com/drive/v3/files?pageSize=25&fields=nextPageToken${convertFields(fields)}&pageToken=${nextPageToken}`, options)
@@ -163,9 +163,39 @@ function filterMime(mime) {
 }
 
 function starSelected() {
-  console.log('starSelected')
+  if (selected.length > 0) {
+    let requests = [];
+
+    selected.forEach(id => {
+      requests.push(starActionId(id, true));
+    });
+    Promise.all(requests).then(console.log).catch(console.error);
+  }
 }
 
 function unstarSelected() {
-  console.log('unstarSelected')
+  if (selected.length > 0) {
+    let requests = [];
+
+    selected.forEach(id => {
+      requests.push(starActionId(id, false));
+    });
+    Promise.all(requests).then(console.log).catch(console.error);
+  }
+}
+
+
+function starActionId(id, starring) {
+  return new Promise((resolve, reject) => {
+    getRequestHeaders().then(headers => {
+      let options = {
+        headers : headers,
+        method: 'PATCH',
+        body: JSON.stringify({ 'starred' : starring })
+      };
+      fetch(`https://www.googleapis.com/drive/v3/files/${id}`, options)
+        .then(res => res.json())
+        .then(resolve);
+    }).catch(reject);
+  });
 }
