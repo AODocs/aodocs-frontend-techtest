@@ -80,6 +80,15 @@
         }
 
         .files-actions {
+            position: fixed;
+            padding: 1em;
+            z-index: 99;
+            left: 0;
+            right: 0;
+            top: 0;
+            float: right;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
             display: flex;
             justify-content: flex-end;
             height: 40px;
@@ -135,11 +144,14 @@
     </style>
 </head>
 <body>
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <div class="files-actions">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <div class="selected-count"></div>
         <div class="btn star disabled">STAR SELECTED</div>
         <div class="btn unstar disabled">UNSTAR SELECTED</div>
+    </div>
+    <div style="margin-top: 5%">
+        <center><i>Open files by clicking on the thumbnail, select files by clicking on the name</i></center>
     </div>
     <div id="content">
         <div class="file-box hidden">
