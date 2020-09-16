@@ -1,7 +1,7 @@
-import { getRequestHeaders } from './auth';
+import { getRequestHeaders } from './auth.ts';
 
 function listDriveFile() {
-  getRequestHeaders().then(headers => console.log(headers));
+  getRequestHeaders().then((headers) => console.log(headers));
 }
 
 listDriveFile();

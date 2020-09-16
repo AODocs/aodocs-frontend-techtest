@@ -6,7 +6,7 @@ interface WindowGapi extends Window {
   onSignIn: (googleUser: any) => void;
 }
 
-const windowGapi = <WindowGapi>window;
+const windowGapi = <WindowGapi><unknown>window;
 
 let accessTokenRetrieved: (value: string) => void;
 const accessTokenPromise = new Promise((resolve) => {
