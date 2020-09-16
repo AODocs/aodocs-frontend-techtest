@@ -50,7 +50,7 @@ The applicant should try to complete the objectives below in the listed order.
 * Add pagination to display the next/previous page of Files.
 * Bonus: Add a way to download the selected files as a ZIP archive.
 
-<a name="myfootnote1">1</a>: You will need to use the [fields query parameter](https://developers.google.com/drive/api/v3/performance#partial-response) to retrieve the Modification date and the Thumbnail url.
+<a name="myfootnote1">1</a>: You will need to use the [fields query parameter](https://developers.google.com/drive/api/v3/fields-parameter) to retrieve the Modification date and the Thumbnail url.
 
 ## Useful link
 
