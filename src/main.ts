@@ -20,7 +20,8 @@ async function listDriveFile(): Promise<void> {
 			&fields=
 				files/name,
 				files/thumbnailLink,
-				files/modifiedTime
+				files/modifiedTime,
+				files/webViewLink
 		`, init)
         .then(response => response.json())
         .then(data => {
@@ -39,7 +40,14 @@ async function listDriveFile(): Promise<void> {
                     const img = document.createElement('img');
                     img.setAttribute('src', el.thumbnailLink);
 
-                    li.appendChild(img);
+                    // Create the link to open the document
+                    const link = document.createElement('a');
+                    link.setAttribute('href', el.webViewLink);
+                    link.setAttribute('target', '_blank'); // Open in a new tab
+                    // Insert img element in the link
+                    link.appendChild(img);
+
+                    li.appendChild(link);
                 }
                 li.appendChild(content);
 
