@@ -3,6 +3,16 @@ import moment from 'moment';
 import { File } from './models/file'
 
 /**
+ * @desc Find out if an HTMLElement has a star as lastchild
+ * @param el - HTMLElement to inspect
+ * @return boolean
+ */
+function hasStar(el: HTMLElement) {
+    const contentOfLastChild = (el!.lastChild as HTMLElement).innerHTML;
+    return contentOfLastChild === '★';
+}
+
+/**
  * @desc List files of a Google Drive
  * @param string previousPageToken - Token of the previous page, empty as default
  * @param string nextPageToken @optional - Token of the next page
@@ -19,6 +29,7 @@ async function listDriveFile(): Promise<void> {
 			pageSize=25
 			&fields=
 				files/name,
+				files/id,
 				files/thumbnailLink,
 				files/modifiedTime,
 				files/webViewLink
@@ -66,6 +77,28 @@ async function listDriveFile(): Promise<void> {
                 checks = [];
                 $(':checked').each((i, el) => { checks.push(el.id); });
             });
+
+            const star = document.getElementById('star');
+            const unstar = document.getElementById('unstar');
+
+            // Add a star to the selected elements
+            star!.onclick = () => {
+                checks.forEach(id => {
+                    const starctn = document.createElement('p');
+                    starctn.textContent = '★';
+
+                    const parentElement = document.getElementById(id)!.parentElement;
+                    if (!hasStar(parentElement!)) parentElement!.appendChild(starctn) // Prevent duplication of stars
+                });
+            }
+
+            // Delete the star on the selected elements
+            unstar!.onclick = () => {
+                checks.forEach(el => {
+                    const parentElement = document.getElementById(el)!.parentElement;
+                    if (hasStar(parentElement!)) parentElement!.removeChild((parentElement!.lastChild as HTMLElement)); // Prevents removing the wrong element
+                });
+            }
         });
 }
 
