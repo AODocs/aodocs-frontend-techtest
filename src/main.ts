@@ -17,7 +17,7 @@ function hasStar(el: HTMLElement) {
  * @param string previousPageToken - Token of the previous page, empty as default
  * @param string nextPageToken @optional - Token of the next page
  */
-async function listDriveFile(): Promise<void> {
+async function listDriveFile(previousPageToken: string = '', nextPageToken?: string): Promise<void> {
     const headers = await getRequestHeaders();
 
     const init = {
@@ -25,14 +25,20 @@ async function listDriveFile(): Promise<void> {
         headers
     };
 
+    // Set the pageToken for next or previous page
+    const param_page = previousPageToken && previousPageToken !== '' ? `&pageToken=${previousPageToken}` :
+        nextPageToken ? `&pageToken=${nextPageToken}` : '';
+
     fetch(`https://www.googleapis.com/drive/v3/files?
 			pageSize=25
 			&fields=
-				files/name,
+				nextPageToken,
 				files/id,
+				files/name,
 				files/thumbnailLink,
 				files/modifiedTime,
 				files/webViewLink
+			${param_page}
 		`, init)
         .then(response => response.json())
         .then(data => {
@@ -70,6 +76,18 @@ async function listDriveFile(): Promise<void> {
 
                 list!.appendChild(li);
             });
+
+            // Previous pagination
+            const previous = document.getElementById('previous');
+            document.getElementById('previous')!.style.cursor = "pointer";
+            if (!nextPageToken) document.getElementById('previous')!.style.cursor = "not-allowed"; // If no previous page
+            previous!.onclick = () => { if (nextPageToken) listDriveFile(previousPageToken); };
+
+            // Next pagination
+            const next = document.getElementById('next');
+            document.getElementById('next')!.style.cursor = "pointer";
+            if (!data.nextPageToken) document.getElementById('next')!.style.cursor = "not-allowed"; // If no next page
+            next!.onclick = () => { if (data.nextPageToken) listDriveFile('', data.nextPageToken); };
 
             // Save the selected elements
             let checks: string[] = [];
