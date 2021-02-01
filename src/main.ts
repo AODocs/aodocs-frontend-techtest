@@ -51,7 +51,20 @@ async function listDriveFile(): Promise<void> {
                 }
                 li.appendChild(content);
 
+                // Create the checkbox input
+                const input = document.createElement('input');
+                input.setAttribute('id', el.id);
+                input.setAttribute('type', 'checkbox');
+                li.prepend(input);
+
                 list!.appendChild(li);
+            });
+
+            // Save the selected elements
+            let checks: string[] = [];
+            $('input[type="checkbox"').on('click', () => {
+                checks = [];
+                $(':checked').each((i, el) => { checks.push(el.id); });
             });
         });
 }
