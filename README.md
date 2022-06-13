@@ -43,7 +43,7 @@ You can use all the packages you want for this test:
 The applicant should try to complete the objectives below in the listed order.
 
 * List the first 25 [Files](https://developers.google.com/drive/api/v3/reference/files) from Google Drive for the currently logged-in Google user.
-* Display these Files as a list with the following information: Title / Modification Date (displayed as relative time) / Thumbnail.<sup>[1](#myfootnote1)</sup>
+* Display these Files as a list with the following information: Name / Modification Date (displayed as relative time) / Thumbnail.<sup>[1](#myfootnote1)</sup>
 * It should be possible to open a File in new tab by clicking on its thumbnail.
 * It should be possible to select one or more Files in the list.
 * Add an option to star/unstar the selected Files.
